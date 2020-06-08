@@ -85,7 +85,12 @@ public class ExposureHomeViewModel extends AndroidViewModel {
                         exposureEntities.add(
                             ExposureEntity.create(
                                 exposureInformation.getDateMillisSinceEpoch(),
-                                tokenEntity.getLastUpdatedTimestampMs()));
+                                tokenEntity.getLastUpdatedTimestampMs(),
+                                exposureInformation.getDurationMinutes(),
+                                exposureInformation.getAttenuationValue(),
+                                exposureInformation.getTransmissionRiskLevel(),
+                                exposureInformation.getTotalRiskScore()
+                            ));
                       }
                       return exposureRepository.upsertAsync(exposureEntities);
                     },

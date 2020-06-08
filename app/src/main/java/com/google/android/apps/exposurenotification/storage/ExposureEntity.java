@@ -51,9 +51,25 @@ public class ExposureEntity {
   @ColumnInfo(name = "received_timestamp_ms")
   private long receivedTimestampMs;
 
-  ExposureEntity(long dateMillisSinceEpoch, long receivedTimestampMs) {
+  @ColumnInfo(name = "duration_minutes")
+  private int durationMinutes;
+
+  @ColumnInfo(name = "attenuation")
+  private int attenuation;
+
+  @ColumnInfo(name = "risk_level")
+  private int riskLevel;
+
+  @ColumnInfo(name = "risk_score")
+  private int riskScore;
+
+  ExposureEntity(long dateMillisSinceEpoch, long receivedTimestampMs, int durationMinutes, int attenuation, int riskLevel, int riskScore) {
     this.receivedTimestampMs = receivedTimestampMs;
     this.dateMillisSinceEpoch = dateMillisSinceEpoch;
+    this.durationMinutes = durationMinutes;
+    this.attenuation = attenuation;
+    this.riskLevel = riskLevel;
+    this.riskScore = riskScore;
   }
 
   /**
@@ -64,8 +80,8 @@ public class ExposureEntity {
    * @param receivedTimestampMs  the timestamp in milliseconds since epoch for when the exposure was
    *                             received by the app
    */
-  public static ExposureEntity create(long dateMillisSinceEpoch, long receivedTimestampMs) {
-    return new ExposureEntity(dateMillisSinceEpoch, receivedTimestampMs);
+  public static ExposureEntity create(long dateMillisSinceEpoch, long receivedTimestampMs, int durationMinutes, int attenuation, int riskLevel, int riskScore) {
+    return new ExposureEntity(dateMillisSinceEpoch, receivedTimestampMs, durationMinutes, attenuation, riskLevel, riskScore);
   }
 
   public long getId() {
@@ -92,6 +108,38 @@ public class ExposureEntity {
     this.dateMillisSinceEpoch = dateMillisSinceEpoch;
   }
 
+  public int getDurationMinutes() {
+    return durationMinutes;
+  }
+
+  public void setDurationMinutes(int durationMinutes) {
+    this.durationMinutes = durationMinutes;
+  }
+
+  public int getAttenuation() {
+    return attenuation;
+  }
+
+  public void setAttenuation(int attenuation) {
+    this.attenuation = attenuation;
+  }
+
+  public int getRiskLevel() {
+    return riskLevel;
+  }
+
+  public void setRiskLevel(int riskLevel) {
+    this.riskLevel = riskLevel;
+  }
+
+  public int getRiskScore() {
+    return riskScore;
+  }
+
+  public void setRiskScore(int riskScore) {
+    this.riskScore = riskScore;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) {
@@ -103,11 +151,22 @@ public class ExposureEntity {
     ExposureEntity that = (ExposureEntity) o;
     return id == that.id &&
         dateMillisSinceEpoch == that.dateMillisSinceEpoch &&
-        receivedTimestampMs == that.receivedTimestampMs;
+        receivedTimestampMs == that.receivedTimestampMs &&
+        durationMinutes == that.durationMinutes &&
+        attenuation == that.attenuation &&
+        riskLevel == that.riskLevel &&
+        riskScore == that.riskScore;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, dateMillisSinceEpoch, receivedTimestampMs);
+    return Objects
+        .hash(id, dateMillisSinceEpoch, receivedTimestampMs, durationMinutes, attenuation,
+            riskLevel,
+            riskScore);
+  }
+
+  public String debugStuff() {
+    return "Duration: "+durationMinutes+" minutes\nAttenuation:"+attenuation+" dBm\nRisk level: "+riskLevel+"\nRisk score: "+riskScore;
   }
 }
