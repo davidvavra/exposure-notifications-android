@@ -59,5 +59,4 @@ public class ExposureHomeViewModel extends AndroidViewModel {
   public LiveData<List<ExposureEntity>> getAllExposureEntityLiveData() {
     return getAllLiveData;
   }
-
 }

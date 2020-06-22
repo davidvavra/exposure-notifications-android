@@ -46,6 +46,7 @@ public class ExposureBottomSheetFragment extends BottomSheetDialogFragment {
     Bundle args = new Bundle();
     args.putLong(KEY_DATE_MILLIS_SINCE_EPOCH, exposureEntity.getDateMillisSinceEpoch());
     args.putLong(KEY_RECEIVED_TIMESTAMP_MS, exposureEntity.getReceivedTimestampMs());
+    args.putString("DEBUG_STUFF", exposureEntity.debugStuff());
     fragment.setArguments(args);
     return fragment;
   }
@@ -63,6 +64,7 @@ public class ExposureBottomSheetFragment extends BottomSheetDialogFragment {
 
     TextView possibleExposureSubheading = view.findViewById(R.id.possible_exposure_subheading);
     TextView verifiedResultExplanation = view.findViewById(R.id.verified_result_explanation);
+    TextView debugStuff = view.findViewById(R.id.debug_stuff);
     Button learnMore = view.findViewById(R.id.learn_more_button);
     TextView infoStatus = view.findViewById(R.id.info_status);
     Button done = view.findViewById(R.id.done_button);
@@ -75,6 +77,7 @@ public class ExposureBottomSheetFragment extends BottomSheetDialogFragment {
 
       long receivedTimestampMs = getArguments().getLong(KEY_RECEIVED_TIMESTAMP_MS);
       infoStatus.setText(getFormattedInfoText(receivedTimestampMs));
+      debugStuff.setText(getArguments().getString("DEBUG_STUFF"));
     }
 
     learnMore.setOnClickListener((v) -> learnMoreClicked());
