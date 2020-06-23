@@ -38,8 +38,7 @@ import java.util.concurrent.TimeUnit;
 import org.threeten.bp.Duration;
 
 /**
- * Performs work for {@value
- * com.google.android.gms.nearby.exposurenotification.ExposureNotificationClient#ACTION_EXPOSURE_STATE_UPDATED}
+ * Performs work for {@value com.google.android.gms.nearby.exposurenotification.ExposureNotificationClient#ACTION_EXPOSURE_STATE_UPDATED}
  * broadcast from exposure notification API.
  */
 public class StateUpdatedWorker extends ListenableWorker {
@@ -70,11 +69,11 @@ public class StateUpdatedWorker extends ListenableWorker {
       return Futures.immediateFuture(Result.failure());
     } else {
       return FluentFuture.from(
-              TaskToFutureAdapter.getFutureWithTimeout(
-                  ExposureNotificationClientWrapper.get(context).getExposureSummary(token),
-                  GET_SUMMARY_TIMEOUT.toMillis(),
-                  TimeUnit.MILLISECONDS,
-                  AppExecutors.getScheduledExecutor()))
+          TaskToFutureAdapter.getFutureWithTimeout(
+              ExposureNotificationClientWrapper.get(context).getExposureSummary(token),
+              GET_SUMMARY_TIMEOUT.toMillis(),
+              TimeUnit.MILLISECONDS,
+              AppExecutors.getScheduledExecutor()))
           .transformAsync(
               (exposureSummary) -> {
                 Log.d(TAG, "EN summary received: " + exposureSummary);
@@ -89,7 +88,7 @@ public class StateUpdatedWorker extends ListenableWorker {
           .catching(Exception.class, x -> {
             Log.e(TAG, "Failure to update app state (tokens, etc) from exposure summary.", x);
             return Result.failure();
-            }, AppExecutors.getLightweightExecutor());
+          }, AppExecutors.getLightweightExecutor());
     }
   }
 
@@ -108,7 +107,11 @@ public class StateUpdatedWorker extends ListenableWorker {
                 exposureEntities.add(
                     ExposureEntity.create(
                         exposureInformation.getDateMillisSinceEpoch(),
-                        System.currentTimeMillis()));
+                        System.currentTimeMillis(),
+                        exposureInformation.getDurationMinutes(),
+                        exposureInformation.getAttenuationValue(),
+                        exposureInformation.getTransmissionRiskLevel(),
+                        exposureInformation.getTotalRiskScore()));
               }
               return exposureRepository.upsertAsync(exposureEntities);
             },
